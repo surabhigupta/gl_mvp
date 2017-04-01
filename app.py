@@ -6,6 +6,7 @@ app = Flask(__name__)
 Compress(app)
 app.debug = True
 
+
 @app.route('/')
 def get_homepage():
     return render_template('base.html')
