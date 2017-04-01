@@ -1,0 +1,53 @@
+html {
+    background: #575656;
+}
+
+body, .main-section p {
+    line-height: 1.728571;
+    font-size: 16px;
+    color: #4a4a4a;
+}
+
+.section-container {
+    min-width: 900px;
+}
+
+.main-section .word {
+    line-height: 1.628571;
+    font-size: 16px;
+}
+
+.main-section .timeline>li .timeline-image {
+    background-color: #65809C;
+}
+
+.main-section .navbar-header {
+    cursor: pointer;
+}
+
+@media (max-width: 978px) {
+    body {
+        padding: 0 10px;
+        margin: 0px;
+        width: 100%;
+    }
+}
+
+.timeline {
+    margin-top: 70px;
+    margin-right: 50px;
+}
+
+.main-section .top-row {
+    padding-top:100px;
+}
+
+.main-section .row {
+    padding-left:100px;
+    padding-right:100px;
+    padding-bottom:20px;
+}
+
+.main-title {
+    font-size: 25px;
+}
