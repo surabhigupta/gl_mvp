@@ -44,12 +44,9 @@
             <body ng-controller="MainController">
             <h1>Visual Field</h1>
 
-            <p id="hover-text" class="hover-text" ng-show="showCursorText && hoverText" ng-bind-html="hoverText">
-            </p>
-
             <div class="flex-row top-bar">
-                <select ng-model="selectedDataset" class="dataset-selector" ng-change="drawChart()"
-                        ng-options="dataset.name for dataset in datasets">
+                <select ng-model="selectedView" class="dataset-selector" ng-change="drawChart()"
+                        ng-options="dataset.name for dataset in views">
                 </select>
                 <label class="showValuesToggle">
                     Show Values: <input type="checkbox" ng-model="showValuesOnHeatMap"
