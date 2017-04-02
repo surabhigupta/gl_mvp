@@ -28,7 +28,7 @@
                 legendItemSpacing = 6,
                 totalwidth = 700,
                 height = 300,
-                gridSize = 32, transitionDuration = 25,
+                gridSize = 40, transitionDuration = 25,
                 colors = ["#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"],
                 textColors = ["#41b6c4", "#7fcdbb", "#c7e9b4", "#edf8b1", "#081d58", "#253494", "#225ea8", "#1d91c0"];
 
@@ -57,13 +57,13 @@
                     .enter()
                     .append("rect")
                     .attr("x", function (d) {
-                        return (d.day - 1) * gridSize;
+                        return (d.day) * gridSize;
                     })
                     .attr("y", function (d) {
                         return d.hour * gridSize;
                     })
-                    .attr("rx", 4)
-                    .attr("ry", 4)
+                    .attr("rx", 2)
+                    .attr("ry", 2)
                     .attr("width", gridSize)
                     .attr("height", gridSize)
                     .attr("class", "bordered")
@@ -136,12 +136,12 @@
                     })
                     .attr("class", "label-text")
                     .attr("x", function (d, i) {
-                        return d.day * gridSize + gridSize * 5 / 6;
+                        return (d.day) * gridSize + gridSize*0.5;
                     })
                     .attr("y", function (d) {
-                        return d.hour * gridSize + gridSize * 5 / 6;
+                        return d.hour * gridSize + gridSize*0.66;
                     })
-                    .style("text-anchor", "end")
+                    .style("text-anchor", "middle")
                     .transition().duration(function (d, i) {
                         return 100 + i * transitionDuration;
                     })

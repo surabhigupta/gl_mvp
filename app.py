@@ -18,27 +18,27 @@ def get_homepage():
 def get_dummy():
     return json.dumps({"data": [
         {
-            "day": 1,
+            "day": 0,
             "hour": 0,
             "files_changed": 4, "insertions": 111, "deletions": 52, "commits": 1
         },
         {
-            "day": 1,
+            "day": 0,
             "hour": 2,
             "files_changed": 16, "insertions": 668, "deletions": 29045, "commits": 2
         },
         {
-            "day": 1,
+            "day": 0,
             "hour": 3,
             "files_changed": 2, "insertions": 124, "deletions": 99, "commits": 1
         },
         {
-            "day": 1,
+            "day": 0,
             "hour": 4,
             "files_changed": 1, "insertions": 1, "deletions": 1, "commits": 3
         },
         {
-            "day": 1,
+            "day": 0,
             "hour": 5,
             "files_changed": 6, "insertions": 24, "deletions": 8, "commits": 1
         },

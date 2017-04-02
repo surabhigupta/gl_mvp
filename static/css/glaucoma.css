@@ -55,3 +55,7 @@ body, .main-section p {
 .top-bar {
     margin-bottom:20px;
 }
+
+.dataset-selector {
+    margin-right:10px;
+}
