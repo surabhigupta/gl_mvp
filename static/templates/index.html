@@ -17,8 +17,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <div class="select-patient">
-                        <div>Select patient: </div>
+                    <div class="select-patient flex-row">
+                        <div class="select-patient-label">Select patient: </div>
                         <select ng-model="selectedPatient" required ng-change="getPatientData()">
                             <option selected disabled hidden value="">Select Eye</option>
                             <option ng-repeat="patient in patients track by $index"
