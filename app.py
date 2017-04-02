@@ -77,19 +77,14 @@ def get_labels(eye_id):
     id, eye_display = eye_id.split('_')
     eye = "OS" if eye_display == 'Left' else "OD"
 
-    query = "select * from eye_labels where ptid=%s and eye='%s'" % (id, eye)
+    query = "select * from detailed_results where patient_id=%s and eye='%s'" % (id, eye)
+    print query
     cursor.execute(query)
     record = cursor.fetchone()
     result = dict()
     for index, desc in enumerate(cursor.description):
-        value = record[index] if record else 'NAf'
+        value = record[index] if record else 'NA'
         result[desc[0]] = value
-
-    eye = 0 if eye_display == 'Left' else 1
-    query = "select label from true_labels_loris where ptid=%s and eye='%s'" % (id, eye)
-    cursor.execute(query)
-    record = cursor.fetchone()
-    result['true_label'] = record if record else 'NA'
 
     return json.dumps(result)
 

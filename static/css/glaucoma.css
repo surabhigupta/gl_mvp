@@ -91,7 +91,7 @@ body, .main-section p {
 }
 
 .eye-label-value.stable {
-    background-color: rgba(189, 195, 199, 0.75);
+    background-color: rgba(189, 195, 199, 0.5);
 }
 
 .eye-label-value.progressing {
@@ -114,6 +114,7 @@ body, .main-section p {
 
 .algo-label {
     text-align: center;
+    width: 60px;
 }
 
 #labels {

@@ -4,26 +4,29 @@
         .controller('MainController', ['$scope', '$http', function ($scope, $http) {
 
             $scope.algos = [
-                {'key':'md_label',
+                {'key':'MD',
                  'label': 'MD'
                 },
-                {'key':'vfi_label',
+                {'key':'VFI',
                  'label': 'VFI'
                 },
-                {'key':'cigts_label',
+                {'key':'CIGTS',
                  'label': 'CIGTS'
                 },
-                {'key':'agis_label',
+                {'key':'AGIS',
                  'label': 'AGIS'
                 },
-                {'key':'plr_label',
+                {'key':'PLR',
                  'label': 'PLR'
                 },
-                {'key':'poplr_label',
+                {'key':'POPLR',
                  'label': 'POPLR'
                 },
-                {'key':'true_label',
-                 'label': 'True Label'
+                {'key':'RandomForest',
+                 'label': 'Random Forest'
+                },
+                {'key':'RandomForest',
+                 'label': 'Truth'
                 }
             ];
 
