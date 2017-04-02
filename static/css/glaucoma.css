@@ -51,3 +51,7 @@ body, .main-section p {
 .main-title {
     font-size: 25px;
 }
+
+.top-bar {
+    margin-bottom:20px;
+}
