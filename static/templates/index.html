@@ -18,19 +18,18 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a class="page-scroll module-link" ng-click="gotoModule('about')">
-                            About
+                        <a class="page-scroll module-link" ng-click="gotoModule('visual-fields')">
+                            Visual Fields
                         </a>
                     </li>
                     <li>
-                        <a class="module-link" ng-click="gotoModule('section1')">
-                            Section 1
-                        </a>
-                    </li>
-                    <li>
-                        <a class="module-link" ng-click="gotoModule('section2')">
-                            Section 1
-                        </a>
+                        <select class="select-patient" ng-model="selectedPatient" required ng-change="getPatientData()">
+                            <option selected disabled hidden value="">Select Eye</option>
+                            <option ng-repeat="patient in patients track by $index"
+                                    value="{[ patient.id + '_' + patient.eye ]}">
+                                {[ patient.id ]} ({[ patient.eye ]})
+                            </option>
+                        </select>
                     </li>
                 </ul>
             </div>
@@ -39,13 +38,12 @@
         <!-- /.container-fluid -->
     </nav>
     <div class="row top-row">
-        <div id="about">
+        <div id="visual-fields">
 
             <body ng-controller="MainController">
-            <h1>Visual Field</h1>
 
             <div class="flex-row top-bar">
-                <select ng-model="selectedView" class="dataset-selector" ng-change="drawChart()"
+                <select ng-model="selectedView" class="dataset-selector" ng-change="refreshCharts()"
                         ng-options="dataset.name for dataset in views">
                 </select>
                 <label class="showValuesToggle">
@@ -54,29 +52,35 @@
                 </label>
             </div>
 
-            <div id="chart"></div>
+            <div id="charts" class="flex-row"></div>
+
+            <div id="labels" class="flex-row center">
+                <div class="flex-row">
+                <div ng-repeat="algo in algos">
+                    <div class="flex-col">
+                        <div class="eye-label-value" ng-class="labels[algo.key]">
+                            <span ng-if="labels[algo.key]=='NA'">NA</span>
+                        </div>
+                        <div class="algo-label">{[ algo.label ]}</div>
+                    </div>
+                </div>
+                    </div>
+
+                <div class="eye-label-legend flex-row">
+                    <div class="legend-text">Improving </div>
+                    <div class="eye-label-value improving"></div>
+                    <div class="legend-text">Stable </div>
+                    <div class="eye-label-value stable"></div>
+                    <div class="legend-text">Progressing </div>
+                    <div class="eye-label-value progressing"></div>
+                    <div class="legend-text">Unclear </div>
+                    <div class="eye-label-value unclear"></div>
+                </div>
+            </div>
+
+
             </body>
 
         </div>
-
-        <div id="section1" class="centered-module">
-            <H3 class="section-container">Section 1</H3>
-        </div>
-
-        <div class="widget">
-            <div id="section2" class="centered-module">
-                <h3 class="section-container">Section 2</h3>
-            </div>
-        </div>
     </div>
-
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="copyright">All Rights Reserved &copy;</span>
-                </div>
-            </div>
-        </div>
-    </footer>
 </div>
