@@ -87,19 +87,19 @@ body, .main-section p {
 }
 
 .eye-label-value.improving {
-    background-color: rgba(46, 204, 113, 0.75);
+    background-color: #02CCBA;
 }
 
 .eye-label-value.stable {
-    background-color: rgba(189, 195, 199, 0.5);
+    background-color: rgba(75, 175, 242, 0.8);
 }
 
 .eye-label-value.progressing {
-    background-color: rgba(231, 76, 60, 0.75);
+    background-color: rgba(240, 118, 105, 0.8);
 }
 
 .eye-label-value.unclear {
-    background-color: rgba(241, 196, 15, 0.75);
+    background-color: rgba(189, 195, 199, 0.8);
 }
 
 .eye-label-value.NA {
