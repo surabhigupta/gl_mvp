@@ -137,9 +137,8 @@
                     })
                     .style("fill-opacity", 0.7);
 
-                if ($scope.showValuesOnHeatMap) {
-                    showTextElements(data);
-                }
+                showTextElements(data);
+                $scope.setTextVisibility()
 
                 var legend_group =
                     svg.append("g")
@@ -182,8 +181,12 @@
                     });
             };
 
-            $scope.toggleTextVisibility = function () {
-                $('text.label-text').toggleClass('hidden');
+            $scope.setTextVisibility = function () {
+                if ($scope.showValuesOnHeatMap) {
+                    $('text.label-text').removeClass('hidden');
+                } else {
+                    $('text.label-text').addClass('hidden');
+                }
             };
 
             var showTextElements = function (data) {
