@@ -80,7 +80,7 @@
                 legendItemSpacing = 6,
                 totalwidth = 500,
                 height = 340,
-                gridSize = 40, transitionDuration = 25,
+                gridSize = 34, transitionDuration = 25,
                 colors = ["#000000", "#696969", "#808080", "#A9A9A9", "#C0C0C0", "#D3D3D3", "#DCDCDC", "#F5F5F5"]
 
             $scope.drawChart = function (id, data, metadata) {
@@ -105,15 +105,15 @@
 
                 var addText = function (y, text) {
                     svg.append('text')
-                        .attr('x', totalwidth - 150)
+                        .attr('x', totalwidth - 160)
                         .attr('y', y)
                         .text(text);
                 };
 
-                addText(height - 80, metadata["nmeas"] + ' ' + metadata["yearsfollowed"]);
-                addText(height - 60, metadata["md"]);
-                addText(height - 40, metadata["psd"]);
-                addText(height - 20, metadata["vfi"]);
+                addText(height - 130, metadata["nmeas"] + ' ' + metadata["yearsfollowed"]);
+                addText(height - 110, metadata["md"]);
+                addText(height - 90, metadata["psd"]);
+                addText(height - 70, metadata["vfi"]);
 
                 var rect_group = svg.append("g");
                 rect_group.selectAll("rect")
