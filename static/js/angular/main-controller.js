@@ -42,12 +42,16 @@
             $scope.getPatientData = function (first) {
                 $http.get("/vf/" + $scope.selectedPatient).then(function (response) {
                     $scope.data = response.data;
+
+                    _.each(_.range($scope.num_vfs), function (index) {
+                        $('#chart' + index).remove()
+                    });
+
+                    $scope.num_vfs = $scope.data.data.length;
                     _.forEach($scope.data.data, function (value, index) {
-                        if (first) {
-                            var element = document.createElement('div');
-                            element.setAttribute("id", "chart" + index);
-                            document.getElementById("charts").appendChild(element);
-                        }
+                        var element = document.createElement('div');
+                        element.setAttribute("id", "chart" + index);
+                        document.getElementById("charts").appendChild(element);
                         $scope.drawChart(index, value, $scope.data.metadata[index]);
                     });
                 });
