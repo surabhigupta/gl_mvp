@@ -166,17 +166,16 @@
                     .attr('x', legendItemWidth + legendItemSpacing)
                     .attr('y', legendItemWidth - legendItemSpacing)
                     .text(function (d) {
-                        var start = Math.ceil(scale.invert(d)),
-                            end = Math.ceil(scale.invert(d + 1)),
+                        var start = Math.round(scale.invert(d)),
+                            end = Math.round(scale.invert(d + 1)),
                             label;
                         if (start === end) {
                             label = start
                         } else if (start == min) {
                             label = "Below " + end
                         } else if (end == max) {
-                            label = "Above " + end
-                        }
-                        else {
+                            label = "Above " + start
+                        } else {
                             label = end
                         }
                         return label;
