@@ -112,7 +112,7 @@ body, .main-section p {
     width: 25px;
 }
 
-.algo-label {
+.algo-label, .algo-rank {
     text-align: center;
     width: 60px;
 }
@@ -136,4 +136,8 @@ body, .main-section p {
 
 .select-patient-label {
     margin-right:5px;
+}
+
+.rank_label {
+    align-self: flex-end;
 }

@@ -5,10 +5,12 @@
 
             $scope.algos = [
                 {'key':'MD',
-                 'label': 'MD'
+                 'label': 'MD',
+                  'rank': 'md_rank'
                 },
                 {'key':'VFI',
-                 'label': 'VFI'
+                 'label': 'VFI',
+                  'rank': 'vfi_rank'
                 },
                 {'key':'CIGTS',
                  'label': 'CIGTS'
