@@ -40,7 +40,7 @@
 
             <div class="flex-row top-bar">
                 <select ng-model="selectedView" class="dataset-selector" ng-change="refreshCharts()"
-                        ng-options="dataset.name for dataset in views">
+                        ng-options="dataset.name for dataset in getViews()">
                 </select>
                 <label class="showValuesToggle">
                     Show Values: <input type="checkbox" ng-model="showValuesOnHeatMap"
@@ -49,6 +49,9 @@
             </div>
 
             <div id="charts" class="flex-row"></div>
+            <div class="p-value-desc" ng-show="selectedView.data_type != 'sensitivity'">
+                (Red border: p<0.005 Light red border: p<0.05)
+            </div>
 
             <div id="labels" class="flex-row center" ng-if="labels">
                 <div class="rank_label">

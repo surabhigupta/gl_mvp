@@ -141,3 +141,7 @@ body, .main-section p {
 .rank_label {
     align-self: flex-end;
 }
+
+.p-value-desc {
+    text-align: right;
+}

@@ -39,7 +39,9 @@ def get_VF_view_model(eye_id):
                 "y": coods[1],
                 "sensitivity": eye['s' + str(i+1)],
                 "td": eye['td' + str(i+1)],
-                "pd": eye['pd' + str(i+1)]
+                "tdp": eye['tdp' + str(i+1)],
+                "pd": eye['pd' + str(i+1)],
+                "pdp": eye['pdp' + str(i+1)]
             })
         view_model.append(result)
         metadata.append({

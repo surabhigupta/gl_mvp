@@ -67,17 +67,42 @@
             $scope.views = [
                 {
                     name: "Sensitivity",
-                    data_type: "sensitivity"
+                    data_type: "sensitivity",
+                    show: true
                 },
                 {
                     name: "Total Deviation",
-                    data_type: "td"
+                    data_type: "td",
+                    show: true
                 },
                 {
                     name: "Pattern Deviation",
-                    data_type: "pd"
+                    data_type: "pd",
+                    show: true
+                },
+                {
+                    name: "Total Deviation Prob",
+                    data_type: "tdp",
+                    show: false
+                },
+                {
+                    name: "Pattern Deviation Prob",
+                    data_type: "pdp",
+                    show: false
                 }
             ];
+
+            $scope.borderColorMap = {
+                'td': 'tdp',
+                'pd': 'pdp'
+            };
+
+            $scope.getViews = function () {
+                return _.filter($scope.views, function (view) {
+                    return view.show;
+                })
+            };
+
             $scope.selectedView = $scope.views[0];
             $scope.showValuesOnHeatMap = true;
             var svg,
@@ -135,6 +160,22 @@
                     .attr("width", gridSize)
                     .attr("height", gridSize)
                     .attr("class", "bordered")
+                    .attr('stroke', function (d) {
+                        if (!$scope.borderColorMap[dataType]) {
+                            return "transparent"
+                        }
+                        var data_point = d[$scope.borderColorMap[dataType]];
+                        switch (data_point) {
+                            case  0.005: return "rgba(231, 76, 60, 1.0)";
+                            case   0.01: return "rgba(231, 76, 60, 0.2)";
+                            case   0.02: return "rgba(231, 76, 60, 0.2)";
+                            case   0.05: return "rgba(231, 76, 60, 0.2)";
+                            case      1: return 'transparent';
+                            default: return "transparent"
+                        }
+                    })
+                    .attr('stroke-linecap', 'butt')
+                    .attr('stroke-width', "2")
                     .transition().duration(function (d, i) {
                         return i * transitionDuration;
                     })
