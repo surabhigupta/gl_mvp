@@ -165,7 +165,8 @@
                     .attr('class', 'legend')
                     .style('fill', function (d) {
                         return colors[d];
-                    });
+                    })
+                    .style("fill-opacity", 0.7);
 
                 legend.append('text')
                     .attr('x', legendItemWidth + legendItemSpacing)
