@@ -104,7 +104,7 @@
             };
 
             $scope.selectedView = $scope.views[0];
-            $scope.showValuesOnHeatMap = true;
+            $scope.showValuesOnHeatMap = false;
             var svg,
                 scale,
                 legendItemWidth = 18,
