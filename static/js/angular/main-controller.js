@@ -111,6 +111,8 @@
                 legendItemSpacing = 6,
                 totalwidth = 500,
                 height = 340,
+                marginLeft = 5,
+                marginTop = 5,
                 gridSize = 34, transitionDuration = 25,
                 colors = ["#000000", "#696969", "#808080", "#A9A9A9", "#C0C0C0", "#D3D3D3", "#DCDCDC", "#F5F5F5"]
 
@@ -152,10 +154,31 @@
                     .enter()
                     .append("rect")
                     .attr("x", function (d) {
-                        return (d.x) * gridSize;
+                        return (d.x) * gridSize + marginLeft;
                     })
                     .attr("y", function (d) {
-                        return d.y * gridSize;
+                        return d.y * gridSize + marginTop;
+                    })
+                    .attr("width", gridSize)
+                    .attr("height", gridSize)
+                    .transition().duration(function (d, i) {
+                        return i * transitionDuration;
+                    })
+                    .style("fill", function (d) {
+                        return colors[Math.floor(scale(d[dataType]))];
+                    })
+                    .style("fill-opacity", 1.0);
+
+                var border_rect_group = svg.append("g");
+                border_rect_group.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x", function (d) {
+                        return (d.x) * gridSize + marginLeft;
+                    })
+                    .attr("y", function (d) {
+                        return d.y * gridSize + marginTop;
                     })
                     .attr("width", gridSize)
                     .attr("height", gridSize)
@@ -166,26 +189,21 @@
                         }
                         var data_point = d[$scope.borderColorMap[dataType]];
                         switch (data_point) {
-                            case  0.005: return "rgba(231, 76, 60, 1.0)";
-                            case   0.01: return "rgba(231, 76, 60, 0.2)";
-                            case   0.02: return "rgba(231, 76, 60, 0.2)";
-                            case   0.05: return "rgba(231, 76, 60, 0.2)";
+                            case  0.005: return "rgb(231, 76, 60)";
+                            case   0.01: return "rgb(255, 145, 134)";
+                            case   0.02: return "rgb(255, 145, 134)";
+                            case   0.05: return "rgb(255, 145, 134  )";
                             case      1: return 'transparent';
                             default: return "transparent"
                         }
                     })
                     .attr('stroke-linecap', 'butt')
                     .attr('stroke-width', "2")
-                    .transition().duration(function (d, i) {
-                        return i * transitionDuration;
-                    })
-                    .style("fill", function (d) {
-                        return colors[Math.floor(scale(d[dataType]))];
-                    })
-                    .style("fill-opacity", 0.7);
+                    .style("fill", "transparent")
+                    .style("fill-opacity", 0.0);
 
                 showTextElements(data);
-                $scope.setTextVisibility()
+                $scope.setTextVisibility();
 
                 var legend_group =
                     svg.append("g")
@@ -207,7 +225,7 @@
                     .style('fill', function (d) {
                         return colors[d];
                     })
-                    .style("fill-opacity", 0.7);
+                    .style("fill-opacity", 1.0);
 
                 legend.append('text')
                     .attr('x', legendItemWidth + legendItemSpacing)
@@ -249,10 +267,10 @@
                     })
                     .attr("class", "label-text")
                     .attr("x", function (d, i) {
-                        return (d.x) * gridSize + gridSize * 0.5;
+                        return (d.x) * gridSize + gridSize * 0.5 + marginLeft;
                     })
                     .attr("y", function (d) {
-                        return d.y * gridSize + gridSize * 0.66;
+                        return d.y * gridSize + gridSize * 0.66 + marginTop;
                     })
                     .style("text-anchor", "middle")
                     .transition().duration(function (d, i) {
