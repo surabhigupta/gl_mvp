@@ -27,7 +27,7 @@
                 {'key':'RandomForest',
                  'label': 'Random Forest'
                 },
-                {'key':'RandomForest',
+                {'key':'Truth',
                  'label': 'Truth'
                 }
             ];
@@ -103,7 +103,7 @@
                 })
             };
 
-            $scope.selectedView = $scope.views[0];
+            $scope.selectedView = $scope.views[2];
             $scope.showValuesOnHeatMap = false;
             var svg,
                 scale,
