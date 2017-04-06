@@ -114,7 +114,7 @@
                 marginLeft = 5,
                 marginTop = 5,
                 gridSize = 34, transitionDuration = 25,
-                colors = ["#000000", "#696969", "#808080", "#A9A9A9", "#C0C0C0", "#D3D3D3", "#DCDCDC", "#F5F5F5"]
+                colors = ["#343434", "#696969", "#A9A9A9", "#C0C0C0", "#DCDCDC", "#F5F5F5"];
 
             $scope.drawChart = function (id, data, metadata) {
                 var chartName = "#chart" + id;
@@ -165,6 +165,9 @@
                         return i * transitionDuration;
                     })
                     .style("fill", function (d) {
+                        if (dataType == 'sensitivity') {
+                            return "transparent"
+                        }
                         return colors[Math.floor(scale(d[dataType]))];
                     })
                     .style("fill-opacity", 1.0);
@@ -192,13 +195,13 @@
                             case  0.005: return "rgb(231, 76, 60)";
                             case   0.01: return "rgb(255, 145, 134)";
                             case   0.02: return "rgb(255, 145, 134)";
-                            case   0.05: return "rgb(255, 145, 134  )";
+                            case   0.05: return "rgb(255, 145, 134)";
                             case      1: return 'transparent';
                             default: return "transparent"
                         }
                     })
                     .attr('stroke-linecap', 'butt')
-                    .attr('stroke-width', "2")
+                    .attr('stroke-width', "3")
                     .style("fill", "transparent")
                     .style("fill-opacity", 0.0);
 
@@ -248,10 +251,12 @@
             };
 
             $scope.setTextVisibility = function () {
-                if ($scope.showValuesOnHeatMap) {
-                    $('text.label-text').removeClass('hidden');
-                } else {
-                    $('text.label-text').addClass('hidden');
+                if ($scope.selectedView.data_type != 'sensitivity') {
+                    if ($scope.showValuesOnHeatMap) {
+                        $('text.label-text').removeClass('hidden');
+                    } else {
+                        $('text.label-text').addClass('hidden');
+                    }
                 }
             };
 
@@ -278,7 +283,7 @@
                     })
                     .style("fill", function (d) {
                         var dataType = $scope.selectedView.data_type;
-                        if (Math.floor(scale(d[dataType])) == 0) {
+                        if (Math.floor(scale(d[dataType])) == 0 && $scope.selectedView.data_type != 'sensitivity') {
                             return "#ffffff"
                         }
                         return "#000000"
