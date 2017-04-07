@@ -36,10 +36,10 @@
                 $scope.patients = response.data.data;
                 $scope.selectedPatient = $scope.patients[0].id + '_' + $scope.patients[0].eye;
 
-                $scope.getPatientData(1);
+                $scope.getPatientData();
             });
 
-            $scope.getPatientData = function (first) {
+            $scope.getPatientData = function () {
                 $http.get("/vf/" + $scope.selectedPatient).then(function (response) {
                     $scope.data = response.data;
 

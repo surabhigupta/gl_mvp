@@ -44,9 +44,12 @@ def get_VF_view_model(eye_id):
                 "pdp": eye['pdp' + str(i+1)]
             })
         view_model.append(result)
+        # TODO: Add min and max of TD and PD to the list
+        # This will be used to generate one legend for the all the VFs of an eye
+        yrs_string = 'yrs' if eye['yearsfollowed'] > 1.0 else 'yr'
         metadata.append({
             'nmeas': "Visit #%d" % abs(eye['nmeas']),
-            'yearsfollowed': "(%.1f yrs)" % eye['yearsfollowed'] if index > 0 else '',
+            'yearsfollowed': "(%.1f %s)" % (eye['yearsfollowed'], yrs_string) if index > 0 else '',
             'md': "MD: %.2f (p < %.3f)" % (eye['md'], eye['mdprob']),
             'psd': "PSD: %.2f (p < %.3f)" % (eye['psd'], eye['psdprob']),
             'vfi': "VFI: %.2f" % eye['vfi']
@@ -84,7 +87,7 @@ def get_labels(eye_id):
     record = cursor.fetchone()
     result = dict()
     for index, desc in enumerate(cursor.description):
-        value = record[index] if record else 'NA'
+        value = record[index] if (record and record[index] != '-') else 'NA'
         result[desc[0]] = value
 
     # Get the MD rank
