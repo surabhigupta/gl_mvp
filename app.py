@@ -22,17 +22,19 @@ def get_homepage():
     return render_template('base.html')
 
 
+def vf_indices():
+    return filter(lambda x:x!=25 and x!=34, xrange(54))
+
 @app.route("/vf/<eye_id>", methods=['GET'])
 def get_VF_view_model(eye_id):
     data = get_patient_data(eye_id)
     coord_map = get_data_map()
     view_model = []
     metadata = []
+    global_metrics = {}
     for index, eye in enumerate(data):
         result = []
-        for i in xrange(54):
-            if i==25 or i==34:
-                continue
+        for i in vf_indices():
             coods = coord_map[str(i+1)]
             result.append({
                 "x": coods[0],
@@ -54,8 +56,16 @@ def get_VF_view_model(eye_id):
             'psd': "PSD: %.2f (p < %.3f)" % (eye['psd'], eye['psdprob']),
             'vfi': "VFI: %.2f" % eye['vfi']
         })
-    return json.dumps({"data": view_model, "metadata": metadata})
+    global_metrics['min_td'] = min(map(lambda x:aggregate_value('td', 'min', x), data))
+    global_metrics['max_td'] = max(map(lambda x:aggregate_value('td', 'max', x), data))
+    global_metrics['min_pd'] = min(map(lambda x:aggregate_value('pd', 'min', x), data))
+    global_metrics['max_pd'] = max(map(lambda x:aggregate_value('pd', 'max', x), data))
 
+    return json.dumps({"data": view_model, "metadata": metadata, "global": global_metrics})
+
+
+def aggregate_value(metric_type, min_or_max, eye):
+    return min([eye[metric_type + str(i+1)] for i in vf_indices()]) if min_or_max == 'min' else max([eye[metric_type + str(i+1)] for i in vf_indices()])
 
 @app.route("/patients")
 def get_patients():

@@ -128,6 +128,11 @@ body, .main-section p {
 
 .eye-label-legend {
     margin-left: 40px;
+    margin-right: 40px;
+}
+
+.eye-values-legend {
+    text-align: left;
 }
 
 .center {
@@ -144,4 +149,17 @@ body, .main-section p {
 
 .p-value-desc {
     text-align: right;
+    margin-bottom:20px;
+}
+
+#legend {
+    width: 120px;
+}
+
+#labels {
+    height:60px;
+}
+
+.space-between {
+    justify-content: space-between;
 }

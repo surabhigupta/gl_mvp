@@ -4,31 +4,39 @@
         .controller('MainController', ['$scope', '$http', function ($scope, $http) {
 
             $scope.algos = [
-                {'key':'MD',
-                 'label': 'MD',
-                  'rank': 'md_rank'
+                {
+                    'key': 'MD',
+                    'label': 'MD',
+                    'rank': 'md_rank'
                 },
-                {'key':'VFI',
-                 'label': 'VFI',
-                  'rank': 'vfi_rank'
+                {
+                    'key': 'VFI',
+                    'label': 'VFI',
+                    'rank': 'vfi_rank'
                 },
-                {'key':'CIGTS',
-                 'label': 'CIGTS'
+                {
+                    'key': 'CIGTS',
+                    'label': 'CIGTS'
                 },
-                {'key':'AGIS',
-                 'label': 'AGIS'
+                {
+                    'key': 'AGIS',
+                    'label': 'AGIS'
                 },
-                {'key':'PLR',
-                 'label': 'PLR'
+                {
+                    'key': 'PLR',
+                    'label': 'PLR'
                 },
-                {'key':'POPLR',
-                 'label': 'POPLR'
+                {
+                    'key': 'POPLR',
+                    'label': 'POPLR'
                 },
-                {'key':'RandomForest',
-                 'label': 'Random Forest'
+                {
+                    'key': 'RandomForest',
+                    'label': 'Random Forest'
                 },
-                {'key':'Truth',
-                 'label': 'Truth'
+                {
+                    'key': 'Truth',
+                    'label': 'Truth'
                 }
             ];
 
@@ -42,7 +50,6 @@
             $scope.getPatientData = function () {
                 $http.get("/vf/" + $scope.selectedPatient).then(function (response) {
                     $scope.data = response.data;
-
                     _.each(_.range($scope.num_vfs), function (index) {
                         $('#chart' + index).remove()
                     });
@@ -52,13 +59,13 @@
                         var element = document.createElement('div');
                         element.setAttribute("id", "chart" + index);
                         document.getElementById("charts").appendChild(element);
-                        $scope.drawChart(index, value, $scope.data.metadata[index]);
+                        $scope.drawChart(index, value, $scope.data.metadata[index], $scope.data.global);
                     });
                 });
                 $scope.getLabels()
             };
 
-            $scope.getLabels = function() {
+            $scope.getLabels = function () {
                 $http.get("/labels/" + $scope.selectedPatient).then(function (response) {
                     $scope.labels = response.data;
                 });
@@ -109,14 +116,14 @@
                 scale,
                 legendItemWidth = 18,
                 legendItemSpacing = 6,
-                totalwidth = 500,
-                height = 340,
+                totalwidth = 480,
+                height = 300,
                 marginLeft = 5,
                 marginTop = 5,
                 gridSize = 34, transitionDuration = 25,
                 colors = ["#343434", "#696969", "#A9A9A9", "#C0C0C0", "#DCDCDC", "#F5F5F5"];
 
-            $scope.drawChart = function (id, data, metadata) {
+            $scope.drawChart = function (id, data, metadata, global) {
                 var chartName = "#chart" + id;
                 var dataType = $scope.selectedView.data_type;
                 var title = $scope.selectedView.name;
@@ -126,15 +133,12 @@
                     .attr("width", totalwidth)
                     .attr("height", height);
 
-                var min = d3.min(data, function (d) {
-                    return d[dataType];
-                });
-                var max = d3.max(data, function (d) {
-                    return d[dataType];
-                });
+                var min = global['min_'+dataType];
+                var max = global['max_' + dataType];
                 scale = d3.scale.linear()
                     .domain([min, max])
                     .range([0, colors.length - 1]);
+
 
                 var addText = function (y, text) {
                     svg.append('text')
@@ -192,12 +196,18 @@
                         }
                         var data_point = d[$scope.borderColorMap[dataType]];
                         switch (data_point) {
-                            case  0.005: return "rgb(231, 76, 60)";
-                            case   0.01: return "rgb(255, 145, 134)";
-                            case   0.02: return "rgb(255, 145, 134)";
-                            case   0.05: return "rgb(255, 145, 134)";
-                            case      1: return 'transparent';
-                            default: return "transparent"
+                            case  0.005:
+                                return "rgb(231, 76, 60)";
+                            case   0.01:
+                                return "rgb(255, 145, 134)";
+                            case   0.02:
+                                return "rgb(255, 145, 134)";
+                            case   0.05:
+                                return "rgb(255, 145, 134)";
+                            case      1:
+                                return 'transparent';
+                            default:
+                                return "transparent"
                         }
                     })
                     .attr('stroke-linecap', 'butt')
@@ -208,46 +218,59 @@
                 showTextElements(data);
                 $scope.setTextVisibility();
 
-                var legend_group =
-                    svg.append("g")
-                        .attr('transform', 'translate(' + gridSize * 10 + ', ' + 0 + ')');
-                var legend = legend_group.selectAll('.legend')
-                    .data(d3.range(scale.range()[0], scale.range()[1], 1))
-                    .enter()
-                    .append('g')
-                    .attr('transform', function (d, i) {
-                        var width = legendItemWidth + legendItemSpacing;
-                        var y = i * width;
-                        return 'translate(' + 0 + ',' + y + ')';
-                    });
+                var drawLegend = function () {
+                    if (id != 0) {
+                        return;
+                    }
+                    var legend_svg = d3.select("#legend").append("svg");
 
-                legend.append('rect')
-                    .attr('width', legendItemWidth)
-                    .attr('height', legendItemWidth)
-                    .attr('class', 'legend')
-                    .style('fill', function (d) {
-                        return colors[d];
-                    })
-                    .style("fill-opacity", 1.0);
+                    var legend_group =
+                        legend_svg
+                            .attr('width', 100)
+                                .append("g");
 
-                legend.append('text')
-                    .attr('x', legendItemWidth + legendItemSpacing)
-                    .attr('y', legendItemWidth - legendItemSpacing)
-                    .text(function (d) {
-                        var start = Math.round(scale.invert(d)),
-                            end = Math.round(scale.invert(d + 1)),
-                            label;
-                        if (start === end) {
-                            label = start
-                        } else if (start == min) {
-                            label = "Below " + end
-                        } else if (end == max) {
-                            label = "Above " + start
-                        } else {
-                            label = end
-                        }
-                        return label;
-                    });
+                    var legend = legend_group.selectAll('.legend')
+                        .data(d3.range(scale.range()[0], scale.range()[1], 1))
+                        .enter()
+                        .append('g')
+                        .attr('transform', function (d, i) {
+                            var width = legendItemWidth + legendItemSpacing;
+                            var y = i * width;
+                            return 'translate(' + 0 + ',' + y + ')';
+                        });
+
+                    legend.append('rect')
+                        .attr('width', legendItemWidth)
+                        .attr('height', legendItemWidth)
+                        .attr('class', 'legend')
+                        .style('fill', function (d) {
+                            return colors[d];
+                        })
+                        .style("fill-opacity", 1.0);
+
+                    legend.append('text')
+                        .attr('x', legendItemWidth + legendItemSpacing)
+                        .attr('y', legendItemWidth - legendItemSpacing)
+                        .text(function (d) {
+                            var start = Math.round(scale.invert(d)),
+                                end = Math.round(scale.invert(d + 1)),
+                                label;
+                            if (start === end) {
+                                label = start
+                            } else if (start == min) {
+                                label = "Below " + end
+                            } else if (end == max) {
+                                label = "Above " + start
+                            } else {
+                                label = end
+                            }
+                            return label;
+                        });
+                };
+
+                if (dataType != 'sensitivity') {
+                    drawLegend()
+                }
             };
 
             $scope.setTextVisibility = function () {
@@ -283,7 +306,7 @@
                     })
                     .style("fill", function (d) {
                         var dataType = $scope.selectedView.data_type;
-                        if (Math.floor(scale(d[dataType])) == 0 && $scope.selectedView.data_type != 'sensitivity') {
+                        if ($scope.selectedView.data_type != 'sensitivity' && Math.floor(scale(d[dataType])) == 0) {
                             return "#ffffff"
                         }
                         return "#000000"
@@ -292,7 +315,7 @@
 
             $scope.refreshCharts = function () {
                 _.forEach($scope.data.data, function (value, index) {
-                    $scope.drawChart(index, value, $scope.data.metadata[index]);
+                    $scope.drawChart(index, value, $scope.data.metadata[index], $scope.data.global);
                 });
             };
 
