@@ -222,6 +222,7 @@
                     if (id != 0) {
                         return;
                     }
+                    d3.select("#legend").selectAll("svg").remove();
                     var legend_svg = d3.select("#legend").append("svg");
 
                     var legend_group =
