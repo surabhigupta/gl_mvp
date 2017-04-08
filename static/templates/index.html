@@ -48,22 +48,23 @@
                 </label>
             </div>
 
-            <div id="charts" class="flex-row"></div>
+            <div id="charts" class="flex-row scroll"></div>
 
             <div class="flex-row space-between">
-                <div id="labels" class="flex-row center" ng-if="labels">
-                    <div class="rank_label">
-                        Percentile
-                    </div>
-
+                <div id="labels" class="flex-column center" ng-if="labels">
                     <div class="flex-row">
-                        <div ng-repeat="algo in algos">
-                            <div class="flex-col">
-                                <div class="eye-label-value" ng-class="labels[algo.key]">
-                                    <span ng-if="labels[algo.key]=='NA'">NA</span>
+                        <div class="rank_label">
+                            Percentile
+                        </div>
+                        <div class="flex-row">
+                            <div ng-repeat="algo in algos">
+                                <div class="flex-col">
+                                    <div class="eye-label-value" ng-class="labels[algo.key]">
+                                        <span ng-if="labels[algo.key]=='NA'">NA</span>
+                                    </div>
+                                    <div class="algo-label">{[ algo.label ]}</div>
+                                    <div class="algo-rank" ng-if="algo.rank">{[ labels[algo.rank] ]}</div>
                                 </div>
-                                <div class="algo-label">{[ algo.label ]}</div>
-                                <div class="algo-rank" ng-if="algo.rank">{[ labels[algo.rank] ]}</div>
                             </div>
                         </div>
                     </div>
