@@ -7,12 +7,12 @@
                 {
                     'key': 'MD',
                     'label': 'MD',
-                    'rank': 'md_rank'
+                    'rank': 'md_slope'
                 },
                 {
                     'key': 'VFI',
                     'label': 'VFI',
-                    'rank': 'vfi_rank'
+                    'rank': 'vfi_slope'
                 },
                 {
                     'key': 'CIGTS',

@@ -100,18 +100,14 @@ def get_labels(eye_id):
         value = record[index] if (record and record[index] != '-') else 'NA'
         result[desc[0]] = value
 
-    # Get the MD rank
-    query = "select round(r.d_rnk) from (select ptid, eye, md_slope, dense_rank() over (order by md_slope) as d_rnk from md_slope) r where ptid=%s and eye='%s';" % (id, eye)
-    cursor.execute(query)
-    record = cursor.fetchone()
-    print record
-    result["md_rank"] = "%.1f" % (record[0]*100.0/13156)
+    def add_rank_to_result(table_name, column_name):
+        query = "select round(r.d_rnk) from (select ptid, eye, %s, dense_rank() over (order by %s) as d_rnk from %s) r where ptid=%s and eye='%s';" % (column_name, column_name, table_name, id, eye)
+        cursor.execute(query)
+        record = cursor.fetchone()
+        result[column_name] = "%.1f" % (record[0]*100.0/13156)
 
-    # Get the VFI rank
-    query = "select round(r.d_rnk) from (select ptid, eye, vfi_slope, dense_rank() over (order by vfi_slope) as d_rnk from vfi_slope) r where ptid=%s and eye='%s';" % (id, eye)
-    cursor.execute(query)
-    record = cursor.fetchone()
-    result["vfi_rank"] = "%.1f" % (record[0]*100.0/13156)
+    add_rank_to_result("md_slope", "md_slope")
+    add_rank_to_result("vfi_slope", "vfi_slope")
 
     return json.dumps(result)
 
