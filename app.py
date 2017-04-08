@@ -97,7 +97,7 @@ def get_labels(eye_id):
     record = cursor.fetchone()
     result = dict()
     for index, desc in enumerate(cursor.description):
-        value = record[index] if (record and record[index] != '-') else 'NA'
+        value = record[index] if (record and record[index] != '-') else 'unclear'
         result[desc[0]] = value
 
     def add_rank_to_result(table_name, column_name):
