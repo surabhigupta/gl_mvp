@@ -161,3 +161,13 @@ div.rank_label {
 .scroll {
     overflow-x: scroll;
 }
+
+.next-button {
+    text-align: center;
+    background-color: #008cfb;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px 25px 20px 25px;
+    padding: 3px;
+}

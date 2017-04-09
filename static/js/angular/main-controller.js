@@ -110,6 +110,18 @@
                 })
             };
 
+            $scope.nextPatient = function (patient) {
+                var patient_id = _.split(patient, '_')[0];
+                var eye = _.split(patient, '_')[1];
+                var index = _.findIndex($scope.patients, function (patient) {
+                    return (patient.id == patient_id) && (patient.eye = eye);
+                });
+                if (index < $scope.patients.length-1) {
+                    $scope.selectedPatient = $scope.patients[index+1].id + '_' + $scope.patients[index+1].eye;
+                    $scope.getPatientData()
+                }
+            };
+
             $scope.selectedView = $scope.views[2];
             $scope.showValuesOnHeatMap = false;
             var svg,

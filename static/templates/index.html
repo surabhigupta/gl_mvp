@@ -80,7 +80,12 @@
                         <div class="legend-text">Unclear</div>
                     </div>
                 </div>
-                <div id="legend"></div>
+                <div class="flex-column-container">
+                    <div class="next-button" ng-click="nextPatient(selectedPatient)">
+                        Next
+                    </div>
+                    <div id="legend"></div>
+                </div>
             </div>
             <div class="p-value-desc" ng-show="selectedView.data_type != 'sensitivity'">
                 <div>Red border: p<0.005</div>
