@@ -9,9 +9,10 @@ from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier as RF
 from sklearn.neighbors import KNeighborsClassifier as KNN
 
+MIN_COMB_SIZE = 3
 
 def export_data_to_csv(data):
-    ordered_h = ["id", "truth", "nvisit", "age", "vfi", "md", "psd", "td1", "td2", "td3", "td4", "td5", "td6", "td7", "td8", "td9", "td10", "td11", "td12", "td13", "td14", "td15", "td16", "td17", "td18", "td19", "td20", "td21", "td22", "td23", "td24", "td25", "td27", "td28", "td29", "td30", "td31", "td32", "td33", "td34", "td36", "td37", "td38", "td39", "td40", "td41", "td42", "td43", "td44", "td45", "td46", "td47", "td48", "td49", "td50", "td51", "td52", "td53", "td54", "pd1", "pd2", "pd3", "pd4", "pd5", "pd6", "pd7", "pd8", "pd9", "pd10", "pd11", "pd12", "pd13", "pd14", "pd15", "pd16", "pd17", "pd18", "pd19", "pd20", "pd21", "pd22", "pd23", "pd24", "pd25", "pd27", "pd28", "pd29", "pd30", "pd31", "pd32", "pd33", "pd34", "pd36", "pd37", "pd38", "pd39", "pd40", "pd41", "pd42", "pd43", "pd44", "pd45", "pd46", "pd47", "pd48", "pd49", "pd50", "pd51", "pd52", "pd53", "pd54"]
+    ordered_h = ["id", "truth", "nvisit", "age", "vfi", "md", "psd", "tdp1", "tdp2", "tdp3", "tdp4", "tdp5", "tdp6", "tdp7", "tdp8", "tdp9", "tdp10", "tdp11", "tdp12", "tdp13", "tdp14", "tdp15", "tdp16", "tdp17", "tdp18", "tdp19", "tdp20", "tdp21", "tdp22", "tdp23", "tdp24", "tdp25", "tdp27", "tdp28", "tdp29", "tdp30", "tdp31", "tdp32", "tdp33", "tdp34", "tdp36", "tdp37", "tdp38", "tdp39", "tdp40", "tdp41", "tdp42", "tdp43", "tdp44", "tdp45", "tdp46", "tdp47", "tdp48", "tdp49", "tdp50", "tdp51", "tdp52", "tdp53", "tdp54", "pdp1", "pdp2", "pdp3", "pdp4", "pdp5", "pdp6", "pdp7", "pdp8", "pdp9", "pdp10", "pdp11", "pdp12", "pdp13", "pdp14", "pdp15", "pdp16", "pdp17", "pdp18", "pdp19", "pdp20", "pdp21", "pdp22", "pdp23", "pdp24", "pdp25", "pdp27", "pdp28", "pdp29", "pdp30", "pdp31", "pdp32", "pdp33", "pdp34", "pdp36", "pdp37", "pdp38", "pdp39", "pdp40", "pdp41", "pdp42", "pdp43", "pdp44", "pdp45", "pdp46", "pdp47", "pdp48", "pdp49", "pdp50", "pdp51", "pdp52", "pdp53", "pdp54"]
 
     with open('patients.csv', 'w') as fp:
         writer = csv.writer(fp, delimiter=',')
@@ -34,7 +35,7 @@ def create_patient_diff():
     y_labels = pd.DataFrame()
     patients = df.groupby('id')
     for name, patient in patients:
-        combs = get_combinations(len(patient))
+        combs = get_combinations(len(patient), patient.iloc[0]['truth'])
         # print "Combos: ", len(patient), len(combs),
         for index, pt_indices in enumerate(combs):
             data = patient.iloc[pt_indices,:]
@@ -119,16 +120,19 @@ def predict(patients, X,y):
             patient_map[ptid]['combs'][len(combs)].append(int(true==pred))
             by_label_accuracy[str(true)].append(int(true==pred))
 
-        print "Accuracy for progression and stable rows"
-        print np.mean(by_label_accuracy['1']), np.mean(by_label_accuracy['0'])
+        print "Accuracy for progressing and stable rows"
+        print "%.2f (%2d) %.2f (%2d)" % (np.mean(by_label_accuracy['1']), len(by_label_accuracy['1']), np.mean(by_label_accuracy['0']), len(by_label_accuracy['0']))
         print "*********"
         results = [(ptid, patient_map[ptid]['true_label'], len(patient_map[ptid]['preds']), np.mean(patient_map[ptid]['preds'])) for ptid in patient_map]
+        print "%20s %20s %20s %20s" % ("ID", "True Label", "# Data points", "Accuracy")
         for r in results:
-            print r
-        print "___________________________________"
+            print "%20s" * len(r) % tuple(r)
+
+        print "\n%20s %20s %20s" % ("Number of elements", "# Data points", "Accuracy")
         for ptid in patient_map:
-            by_combs = [(ptid, t, len(patient_map[ptid]['combs'][t]), np.mean(patient_map[ptid]['combs'][t])) for t in patient_map[ptid]['combs']]
-            print by_combs
+            by_combs = [(ptid, t, len(patient_map[ptid]['combs'][t]), round(np.mean(patient_map[ptid]['combs'][t]),2)) for t in patient_map[ptid]['combs']]
+            print "%10s" % by_combs[0][0],
+            print [tuple(i[1:]) for i in by_combs]
         return np.mean(y == y_pred)
 
     print type(X), type(y), X.shape, y.shape
@@ -156,13 +160,39 @@ def run_cv(X,y,clf_class,**kwargs):
     return y_pred
 
 
-def get_combinations(n):
-    result = []
-    data = xrange(n)
-    for i in xrange(2, n):
-        result.extend([i for i in itertools.combinations(data, i)])
-    return result
-    # return [xrange(n)]
+def get_split_combinations(n):
+    # Each combination should have approx. half elements from the first half the half from the second half
+    # This will ensure that we don't generate combinations of eyes from the stable section.
+    data = range(n)
+    # Note # elements in set1 will be >= # elements in set(2)
+    set1 = data[:len(data)/2]
+    set2 = data[len(data)/2:]
+    combs = []
+    min_comb_length = max(MIN_COMB_SIZE-1, n-7)
+
+    for i_index in xrange(min_comb_length,len(set1)+1):
+        for i in itertools.combinations(set1, i_index):
+            indices = filter(lambda x: x>0, [i_index-1,i_index,i_index+1])
+            for j_index in indices:
+                for j in itertools.combinations(set2, j_index):
+                    item = list(i)
+                    item.extend(j)
+                    combs.append(item)
+    if len(combs) == 0:
+        combs.append(data)
+    return combs
+
+
+def get_combinations(n, label='stable'):
+    return get_split_combinations(n)
+
+    # result = []
+    # data = xrange(n)
+    # min_comb_length = min(n, max(MIN_COMB_SIZE, n-7))
+    # for i in xrange(min_comb_length, n+1):
+    #     result.extend([i for i in itertools.combinations(data, i)])
+    # return result
+    # return [range(n)]
 
 
 def calculate_num_records():
@@ -180,10 +210,8 @@ def calculate_num_records():
 
 def fetch_patient_data():
     cursor_2, connection_2 = connect()
-    query_label = 'select cast(patient_id as text), "Truth" from detailed_results where (patient_id=833 and eye=\'OD\') or (patient_id=67541 and eye=\'OS\')' \
-                  ' or (patient_id=2356 and eye=\'OS\') or (patient_id=891 and eye=\'OS\') or (patient_id=23394 and eye=\'OD\')'
     # query_label = "select cast(patient_id as text), \"Truth\" from detailed_results"
-    # query_label = "select cast(patient_id as text), \"Truth\" from detailed_results where \"Truth\" = 'progressing' or \"Truth\"='stable'"
+    query_label = "select cast(patient_id as text), \"Truth\" from detailed_results where \"Truth\" = 'progressing' or \"Truth\"='stable' limit 70"
     cursor_2.execute(query_label)
 
     records_label = cursor_2.fetchall()
