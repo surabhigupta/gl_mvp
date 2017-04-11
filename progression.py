@@ -123,16 +123,25 @@ def predict(patients, X,y):
         print "Accuracy for progressing and stable rows"
         print "%.2f (%2d) %.2f (%2d)" % (np.mean(by_label_accuracy['1']), len(by_label_accuracy['1']), np.mean(by_label_accuracy['0']), len(by_label_accuracy['0']))
         print "*********"
+
+        print "Accuracy by patient"
         results = [(ptid, patient_map[ptid]['true_label'], len(patient_map[ptid]['preds']), np.mean(patient_map[ptid]['preds'])) for ptid in patient_map]
         print "%20s %20s %20s %20s" % ("ID", "True Label", "# Data points", "Accuracy")
         for r in results:
             print "%20s" * len(r) % tuple(r)
 
+        print "Accuracy of Progression detection"
+        max_combs = [patient_map[ptid]['combs'][max(patient_map[ptid]['combs'])] for ptid in patient_map]
+        print [round(np.mean(x),2) for x in max_combs]
+        print round(np.mean([i for x in max_combs for i in x]),2)
+
+        print "Accuracy by number of combinations"
         print "\n%20s %20s %20s" % ("Number of elements", "# Data points", "Accuracy")
         for ptid in patient_map:
             by_combs = [(ptid, t, len(patient_map[ptid]['combs'][t]), round(np.mean(patient_map[ptid]['combs'][t]),2)) for t in patient_map[ptid]['combs']]
             print "%10s" % by_combs[0][0],
             print [tuple(i[1:]) for i in by_combs]
+
         return np.mean(y == y_pred)
 
     print type(X), type(y), X.shape, y.shape
@@ -184,14 +193,14 @@ def get_split_combinations(n):
 
 
 def get_combinations(n, label='stable'):
-    return get_split_combinations(n)
-
-    # result = []
-    # data = xrange(n)
-    # min_comb_length = min(n, max(MIN_COMB_SIZE, n-7))
-    # for i in xrange(min_comb_length, n+1):
-    #     result.extend([i for i in itertools.combinations(data, i)])
-    # return result
+    if label=='progressing':
+        return get_split_combinations(n)
+    result = []
+    data = xrange(n)
+    min_comb_length = min(n, max(MIN_COMB_SIZE, n-7))
+    for i in xrange(min_comb_length, n+1):
+        result.extend([i for i in itertools.combinations(data, i)])
+    return result
     # return [range(n)]
 
 
@@ -210,8 +219,8 @@ def calculate_num_records():
 
 def fetch_patient_data():
     cursor_2, connection_2 = connect()
-    # query_label = "select cast(patient_id as text), \"Truth\" from detailed_results"
-    query_label = "select cast(patient_id as text), \"Truth\" from detailed_results where \"Truth\" = 'progressing' or \"Truth\"='stable' limit 70"
+    query_label = "select cast(patient_id as text), \"Truth\" from detailed_results"
+    # query_label = "select cast(patient_id as text), \"Truth\" from detailed_results where \"Truth\" = 'progressing' or \"Truth\"='stable'"
     cursor_2.execute(query_label)
 
     records_label = cursor_2.fetchall()
