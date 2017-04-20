@@ -53,9 +53,6 @@
             <div class="flex-row space-between">
                 <div id="labels" class="flex-column center" ng-if="labels">
                     <div class="flex-row">
-                        <div class="rank_label">
-                            Percentile
-                        </div>
                         <div class="flex-row">
                             <div ng-repeat="algo in algos">
                                 <div class="flex-col">
@@ -63,7 +60,6 @@
                                         <span ng-if="labels[algo.key]=='NA'">NA</span>
                                     </div>
                                     <div class="algo-label">{[ algo.label ]}</div>
-                                    <div class="algo-rank" ng-if="algo.rank">{[ labels[algo.rank] ]}</div>
                                 </div>
                             </div>
                         </div>

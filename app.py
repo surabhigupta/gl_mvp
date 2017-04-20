@@ -106,8 +106,8 @@ def get_labels(eye_id):
         record = cursor.fetchone()
         result[column_name] = "%.1f" % (record[0]*100.0/13156)
 
-    add_rank_to_result("md_slope", "md_slope")
-    add_rank_to_result("vfi_slope", "vfi_slope")
+    # add_rank_to_result("md_slope", "md_slope")
+    # add_rank_to_result("vfi_slope", "vfi_slope")
 
     return json.dumps(result)
 
