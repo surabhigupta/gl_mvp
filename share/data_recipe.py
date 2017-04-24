@@ -20,7 +20,7 @@ class SyntheticDataRecipe(Recipe):
             return [tuple(range(n))]
         result = []
         data = range(2,n)
-        min_VFs = max(2, n-6)
+        min_VFs = max(2, n-4)
         for i in xrange(min_VFs, n-1):
             new_comb = [(0,1) + i for i in itertools.combinations(data, i)]
             result.extend(new_comb)
