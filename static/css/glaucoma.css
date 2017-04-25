@@ -158,6 +158,13 @@ div.rank_label {
     justify-content: space-between;
 }
 
+.space-around {
+    justify-content: space-around;
+}
+
+.end {
+    justify-content: flex-end;
+}
 .scroll {
     overflow-x: scroll;
 }
@@ -170,4 +177,24 @@ div.rank_label {
     cursor: pointer;
     margin: 5px 25px 20px 25px;
     padding: 3px;
+    width: 70px;
+}
+
+.width70 {
+    max-width: 500px;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.vf-desc {
+    margin-top: 20px;
+}
+
+.tell-me-more {
+    color: #008cfb;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
 }

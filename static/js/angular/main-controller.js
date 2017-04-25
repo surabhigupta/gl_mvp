@@ -2,7 +2,7 @@
     'use strict';
     angular.module('glaucoma')
         .controller('MainController', ['$scope', '$http', function ($scope, $http) {
-
+            $scope.show_vf_help_text = false;
             $scope.algos = [
                 {
                     'key': 'MD',

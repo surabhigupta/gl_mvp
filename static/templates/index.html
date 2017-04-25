@@ -49,8 +49,12 @@
             </div>
 
             <div id="charts" class="flex-row scroll"></div>
-
-            <div class="flex-row space-between">
+            <div class="flex-row end">
+                <div class="next-button" ng-click="nextPatient(selectedPatient)">
+                        Next
+                </div>
+            </div>
+            <div class="flex-row space-around">
                 <div id="labels" class="flex-column center" ng-if="labels">
                     <div class="flex-row">
                         <div class="flex-row">
@@ -77,15 +81,40 @@
                     </div>
                 </div>
                 <div class="flex-column-container">
-                    <div class="next-button" ng-click="nextPatient(selectedPatient)">
-                        Next
-                    </div>
                     <div id="legend"></div>
                 </div>
             </div>
-            <div class="p-value-desc" ng-show="selectedView.data_type != 'sensitivity'">
-                <div>Red border: p<0.005</div>
-                <div>Light red border: p<0.05</div>
+            <div class="flex-row space-around">
+                <div class="width70">
+                    <div>The visual field captures the results of patient's vision test at a particular visit in an
+                        eye-shaped matrix. The numbers represent a patient's sensitivity to light at 52-distinct points.
+                        Higher numbers represent stronger vision. There are three standard measures of vision on visual
+                        fields
+                    </div>
+                    <div class="tell-me-more" ng-click="show_vf_help_text = !show_vf_help_text" ng-show="show_vf_help_text">Got it!</div>
+                    <div class="tell-me-more" ng-click="show_vf_help_text = !show_vf_help_text" ng-show="!show_vf_help_text">Tell me more</div>
+                    <div ng-show="show_vf_help_text">
+                        <div class="vf-desc"><b>Raw sensitivity</b>: values of each tested point are listed in decibels in
+                            the sensitivity plot. Higher numbers mean the patient was able to see a more attenuated light,
+                            and thus has more sensitive vision at that location
+                        </div>
+                        <div class="vf-desc"><b>Total deviation</b>: numbers are the deviations in sensitivity from the
+                            expected values for a specific age. It is useful to compare with age-matched normal thresholds
+                            as sensitivity normally decreases gradually with age. Positive values represent areas of the
+                            field where the patient can see dimmer stimuli than the average individual of that age. Negative
+                            values represent decreased sensitivity from normal.
+                        </div>
+                        <div class="vf-desc"><b>Pattern deviation</b>: shows discrepancies within a patient's visual field
+                            by correcting for generalized decreases in visual sensitivity. It is useful in cases where there
+                            is both localized depression due to Glaucoma, as well as globally depressed vision across the
+                            eye due to other pathologies such as cataracts.
+                        </div>
+                    </div>
+                </div>
+                <div class="p-value-desc" ng-show="selectedView.data_type != 'sensitivity'">
+                    <div>Red border: p<0.005</div>
+                    <div>Light red border: p<0.05</div>
+                </div>
             </div>
             </body>
 
